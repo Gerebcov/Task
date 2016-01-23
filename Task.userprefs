@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Script\FigureController.cs">
+    <Files>
+      <File FileName="Assets\Resources\Script\FigureController.cs" Line="60" Column="88" />
+      <File FileName="Assets\Resources\Figures\Square.cs" Line="4" Column="36" />
+      <File FileName="Assets\Resources\Script\IFigure.cs" Line="4" Column="17" />
+      <File FileName="Assets\Resources\Script\GameControler.cs" Line="78" Column="1" />
+      <File FileName="Assets\Resources\Script\ParticleControl.cs" Line="23" Column="29" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

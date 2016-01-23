@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{20166455-60C4-4054-A803-4CC2187E612E}</ProjectGuid>
+	<ProjectGuid>{873CB76C-D80B-A0D2-540E-2619F66152E0}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,9 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Resources\Figures\Square.cs" />
+     <Compile Include="Assets\Resources\Script\FigureController.cs" />
+     <Compile Include="Assets\Resources\Script\GameControler.cs" />
      <Compile Include="Assets\Resources\Script\IFigure.cs" />
-     <Compile Include="Assets\Resources\Script\LvlControler.cs" />
-     <Compile Include="Assets\Resources\Script\LvlFigure.cs" />
      <Compile Include="Assets\Resources\Script\ParticleControl.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/unity 5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

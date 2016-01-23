@@ -3,6 +3,6 @@ using System.Collections;
 
 public interface IFigure  {
 
-	Texture Figure { get;}
+	Texture Figure { get; }
 	Vector3[] AnglePosition { get;}
 }
