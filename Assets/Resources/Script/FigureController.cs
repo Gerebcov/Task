@@ -1,17 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-
 public class FigureController : MonoBehaviour {
 
 	private Texture FigurePicture;
-	[SerializeField]
 	private Vector3[] FigurePositionAngles;
 	private float[] FigureAngles;
 	private float[] FigureLengthParties;
 
-	[SerializeField]
 	private Vector3[] PlayerFigurePositionAngles;
 	private float[] PlayerFigureAngles;
 	private float[] PlayerFigureLengthParties;
@@ -22,8 +18,6 @@ public class FigureController : MonoBehaviour {
 
 	private float PlayerAngle;
 
-
-
 	[SerializeField]
 	private float IntermediateDistance;
 	[SerializeField]
@@ -31,29 +25,23 @@ public class FigureController : MonoBehaviour {
 	[SerializeField]
 	private float ScaleCoof;
 
-
-
 	// Use this for initialization
 	void Start () {
-		AnalysisOfFigures ();
-		ResetPoin ();
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (0)&& gameObject.GetComponent<GameControler>().GameStatus) {
 			ResetPoin();
 		}
-		if (Input.GetMouseButton (0)) {
+		if (Input.GetMouseButton (0) && gameObject.GetComponent<GameControler>().GameStatus) {
 			if (Vector3.Magnitude (TestPointOfAngle - Input.mousePosition) >= IntermediateDistance) {
 				if (Points > 0) {
 					if (TestAngle ()) {
 						if (Points < PlayerFigurePositionAngles.Length - 1) {
 							Points++;
-
-
 						} else {
 							OffsetPointsPlayer();
 						}
@@ -87,7 +75,6 @@ public class FigureController : MonoBehaviour {
 		}
 		FigureAngles[FigureAngles.Length - 1] = Vector3.Angle(Vector3.up, FigurePositionAngles[0] - FigurePositionAngles[FigureAngles.Length - 1]);
 		FigureLengthParties[FigureLengthParties.Length - 1] = Vector3.Magnitude(FigurePositionAngles[0] - FigurePositionAngles[FigureAngles.Length - 1]);
-
 	}
 
 	public void AnalysisOfPlayerFigures()
@@ -99,9 +86,7 @@ public class FigureController : MonoBehaviour {
 			PlayerFigureAngles[i] = Vector3.Angle(Vector3.up, PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
 			PlayerFigureLengthParties[i] = Vector3.Magnitude(PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
 		}
-
 	}
-
 
 	public void ResetPoin()
 	{
@@ -115,18 +100,17 @@ public class FigureController : MonoBehaviour {
 
 	public bool TestAngle()
 	{
-		if (Mathf.Abs(Vector3.Angle (Vector3.up, TestPointOfAngle - Input.mousePosition) - PlayerAngle) >= AngleCoof)
+		if (Mathf.Abs(Vector3.Angle (Vector3.up, PlayerFigurePositionAngles[Points -1] - Input.mousePosition) - PlayerAngle) >= 10)
 			return true;
 		else 
 			return false;
 	}
 
-
-	public void NextFigure()
+	public void NewFigure(Vector3[] angleposition)
 	{
-//		FigurePositionAngles = Controler;
-		ResetPoin ();
+		FigurePositionAngles = angleposition;
 		AnalysisOfFigures ();
+		ResetPoin ();
 	}
 
 	public void OffsetPointsPlayer()
@@ -221,6 +205,4 @@ public class FigureController : MonoBehaviour {
 
 		return false;
 	}
-
-	
 }

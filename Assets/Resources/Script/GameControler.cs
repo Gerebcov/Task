@@ -10,72 +10,58 @@ public class GameControler : MonoBehaviour {
 	private Text PonintCol;
 	[SerializeField]
 	private GameObject StartButton;
-
 	private int Point;
-
-	[SerializeField]
-	private Square[] Figures;
-
-	private int Lvl = 0;
 	private int FigureIndex = -1;
-
 	[SerializeField]
 	private float TimeFoAngle;
-
 	private float TimeLvl;
-
 	[SerializeField]
 	private float TimeFactor;
 
+	private FiguresData Data;
+	[SerializeField]
+	private GameObject RestartButton;
 
+	public bool GameStatus = false;
 
 
 	// Use this for initialization
 	void Start () {
-//		Figures[0] = (Square)Resources.LoadAll("Figures/Square");
+		Data = GameObject.Find("FigureData").GetComponent<FiguresData> ();
 		PonintCol.text = Point.ToString ();
-//		RandomFigures ();
-		Time.timeScale = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-//		if (TimeLvl <= 0)
-//			Fail ();
-//		else
-//			TimeLvl -= Time.deltaTime;
-		
+		if (GameStatus) {
+			if (TimeLvl <= 0)
+			{
+				TimeLvl = 0;
+				Fail ();
+			}
+			else
+			{
+				TimeLvl -= Time.deltaTime;
+			}
+			GameObject.Find("Time").GetComponent<Text>().text = TimeLvl.ToString();
+		}
 	}
 
-//	public void RandomFigures()
-//	{
-//		IFigure F;
-//		for(int i = 0; i < Figures.Length * 2; i++)
-//		{
-//			int R = Random.Range(0, Figures.Length - 1);
-//			F = Figures[i];
-//			Figures[i] = Figures[R];
-//			Figures[R] = F;
-//		}
-//	}
-
 	public void Fail(){
-		TimeLvl = 1;
-		Time.timeScale = 0;
+		GameStatus = false;
+		RestartButton.SetActive (true);
 	}
 
 	public void NextLvl()
 	{
-		Lvl++;
 		TimeFoAngle -= TimeFoAngle * TimeFactor;
-		if (FigureIndex < Figures.Length)
-			FigureIndex++;
-		else {
+		FigureIndex++;
+		if (FigureIndex >= Data.Figures.Length) {
 			FigureIndex = 0;
-//			RandomFigures();
+			Data.RandomFigures ();
 		}
-		gameObject.SendMessage ("NewFigure", FigureIndex, SendMessageOptions.DontRequireReceiver);
-		TimeLvl = Figures [FigureIndex].AnglePosition.Length * TimeFoAngle;
+		Data.NextFigures (FigureIndex);
+		TimeLvl = (float)Data.Figures[FigureIndex].AnglePositions.Length * TimeFoAngle;
 	}
 
 	public void ResetGame()
@@ -86,8 +72,8 @@ public class GameControler : MonoBehaviour {
 	public void StartGame()
 	{
 		StartButton.SetActive(false);
-		Time.timeScale = 1;
-//		NextLvl ();
+		NextLvl ();
+		GameStatus = true;
 	}
 
 	public void  WellDone()
