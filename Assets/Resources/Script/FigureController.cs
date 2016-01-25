@@ -54,7 +54,7 @@ public class FigureController : MonoBehaviour {
 				PlayerFigurePositionAngles [Points] = TestPointOfAngle = Input.mousePosition;
 			}
 
-			if(Points == PlayerFigurePositionAngles.Length - 1 && Vector3.Magnitude(PlayerFigurePositionAngles[0] - Input.mousePosition) <= 50)
+			if(Points == PlayerFigurePositionAngles.Length - 1 && Vector3.Magnitude(PlayerFigurePositionAngles[0] - Input.mousePosition) <= IntermediateDistance * 5)
 			{
 				PlayerFigurePositionAngles[Points] = PlayerFigurePositionAngles[0];
 				AnalysisOfPlayerFigures();

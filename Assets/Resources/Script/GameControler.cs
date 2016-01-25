@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using System;
 
 
 public class GameControler : MonoBehaviour {
 
 	[SerializeField]
-	private Text PonintCol;
+	private Text Score;
 	[SerializeField]
 	private GameObject StartButton;
 	private int Point;
@@ -27,8 +27,8 @@ public class GameControler : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Data = GameObject.Find("FigureData").GetComponent<FiguresData> ();
-		PonintCol.text = Point.ToString ();
+		Data = GameObject.Find("FigureDataBase").GetComponent<FiguresData> ();
+		Score.text = Point.ToString ();
 	}
 	
 	// Update is called once per frame
@@ -43,7 +43,10 @@ public class GameControler : MonoBehaviour {
 			{
 				TimeLvl -= Time.deltaTime;
 			}
-			GameObject.Find("Time").GetComponent<Text>().text = TimeLvl.ToString();
+			if(TimeLvl >= 10)
+				GameObject.Find("Time").GetComponent<Text>().text = Math.Floor(TimeLvl).ToString();
+			else
+				GameObject.Find("Time").GetComponent<Text>().text = Math.Round(TimeLvl, 1).ToString();
 		}
 	}
 
@@ -79,7 +82,7 @@ public class GameControler : MonoBehaviour {
 	public void  WellDone()
 	{
 		Point++;
-		PonintCol.text = Point.ToString ();
+		Score.text = Point.ToString ();
 		NextLvl ();
 	}
 }

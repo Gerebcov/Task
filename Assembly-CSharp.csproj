@@ -46,7 +46,12 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Resources\Figures\Other1.cs" />
+     <Compile Include="Assets\Resources\Figures\Rectangle1.cs" />
+     <Compile Include="Assets\Resources\Figures\Rectangle2.cs" />
+     <Compile Include="Assets\Resources\Figures\Rhombus.cs" />
      <Compile Include="Assets\Resources\Figures\Square.cs" />
+     <Compile Include="Assets\Resources\Figures\Star.cs" />
      <Compile Include="Assets\Resources\Script\FigureController.cs" />
      <Compile Include="Assets\Resources\Script\FiguresData.cs" />
      <Compile Include="Assets\Resources\Script\GameControler.cs" />
