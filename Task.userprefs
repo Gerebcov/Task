@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Script\GameControler.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Resources\Script\FigureController.cs">
     <Files>
-      <File FileName="Assets\Resources\Script\FigureController.cs" Line="103" Column="125" />
-      <File FileName="Assets\Resources\Script\GameControler.cs" Line="30" Column="41" />
+      <File FileName="Assets\Resources\Script\FigureController.cs" Line="151" Column="1" />
+      <File FileName="Assets\Resources\Script\GameControler.cs" Line="1" Column="1" />
       <File FileName="Assets\Resources\Script\FiguresData.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

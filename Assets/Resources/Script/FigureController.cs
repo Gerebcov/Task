@@ -5,18 +5,21 @@ public class FigureController : MonoBehaviour {
 
 	private Texture FigurePicture;
 	private Vector3[] FigurePositionAngles;
-	private float[] FigureAngles;
+	private float[] FigureAnglesX;
+	private float[] FigureAnglesY;
 	private float[] FigureLengthParties;
 
 	private Vector3[] PlayerFigurePositionAngles;
-	private float[] PlayerFigureAngles;
+	private float[] PlayerFigureAnglesX;
+	private float[] PlayerFigureAnglesY;
 	private float[] PlayerFigureLengthParties;
 
 	private Vector3 TestPointOfAngle;
 
-	private int Points;
+	private float PlayerAngleX;
+	private float PlayerAngleY;
 
-	private float PlayerAngle;
+	private bool StartedMoving = false;
 
 	[SerializeField]
 	private float IntermediateDistance;
@@ -37,26 +40,25 @@ public class FigureController : MonoBehaviour {
 			ResetPoin();
 		}
 		if (Input.GetMouseButton (0) && gameObject.GetComponent<GameControler>().GameStatus) {
+			PlayerFigurePositionAngles [PlayerFigurePositionAngles.Length - 1] = Input.mousePosition;
+
 			if (Vector3.Magnitude (TestPointOfAngle - Input.mousePosition) >= IntermediateDistance) {
-				if (Points > 0) {
+				if (StartedMoving) {
 					if (TestAngle ()) {
-						if (Points < PlayerFigurePositionAngles.Length - 1) {
-							Points++;
-						} else {
-							OffsetPointsPlayer();
-						}
-						PlayerAngle = Vector3.Angle (Vector3.up, TestPointOfAngle - Input.mousePosition);
-					} 
+						OffsetPointsPlayer();
+						StartedMoving = false;
+					}
 				} else {
-					PlayerAngle = Vector3.Angle (Vector3.up, TestPointOfAngle - Input.mousePosition);
-					Points++;
+					PlayerAngleX = Vector3.Angle (Vector3.up, TestPointOfAngle - Input.mousePosition);
+					PlayerAngleY = Vector3.Angle (Vector3.right, TestPointOfAngle - Input.mousePosition);
+					StartedMoving = true;
 				}
-				PlayerFigurePositionAngles [Points] = TestPointOfAngle = Input.mousePosition;
+				TestPointOfAngle = Input.mousePosition;
 			}
 
-			if(Points == PlayerFigurePositionAngles.Length - 1 && Vector3.Magnitude(PlayerFigurePositionAngles[0] - Input.mousePosition) <= IntermediateDistance * 5)
+			if(Vector3.Magnitude(PlayerFigurePositionAngles[0] - Input.mousePosition) <= IntermediateDistance * 5)
 			{
-				PlayerFigurePositionAngles[Points] = PlayerFigurePositionAngles[0];
+				PlayerFigurePositionAngles[PlayerFigurePositionAngles.Length - 1] = PlayerFigurePositionAngles[0];
 				AnalysisOfPlayerFigures();
 				ComparisonFigures();
 				OffsetPointsPlayer();
@@ -66,24 +68,29 @@ public class FigureController : MonoBehaviour {
 
 	public void AnalysisOfFigures()
 	{
-		FigureAngles = new float[FigurePositionAngles.Length];
+		FigureAnglesX = new float[FigurePositionAngles.Length];
+		FigureAnglesY = new float[FigurePositionAngles.Length];
 		FigureLengthParties = new float[FigurePositionAngles.Length];
-		for(int i = 0; i < FigureAngles.Length - 1; i++)
+		for(int i = 0; i < FigureAnglesX.Length - 1; i++)
 		{
-			FigureAngles[i] = Vector3.Angle(Vector3.up, FigurePositionAngles[i+1] - FigurePositionAngles[i]);
+			FigureAnglesX[i] = Vector3.Angle(Vector3.up, FigurePositionAngles[i+1] - FigurePositionAngles[i]);
+			FigureAnglesY[i] = Vector3.Angle(Vector3.right, FigurePositionAngles[i+1] - FigurePositionAngles[i]);
 			FigureLengthParties[i] = Vector3.Magnitude(FigurePositionAngles[i+1] - FigurePositionAngles[i]);
 		}
-		FigureAngles[FigureAngles.Length - 1] = Vector3.Angle(Vector3.up, FigurePositionAngles[0] - FigurePositionAngles[FigureAngles.Length - 1]);
-		FigureLengthParties[FigureLengthParties.Length - 1] = Vector3.Magnitude(FigurePositionAngles[0] - FigurePositionAngles[FigureAngles.Length - 1]);
+		FigureAnglesX[FigureAnglesX.Length - 1] = Vector3.Angle(Vector3.up, FigurePositionAngles[0] - FigurePositionAngles[FigureAnglesX.Length - 1]);
+		FigureAnglesY[FigureAnglesY.Length - 1] = Vector3.Angle(Vector3.right, FigurePositionAngles[0] - FigurePositionAngles[FigureAnglesY.Length - 1]);
+		FigureLengthParties[FigureLengthParties.Length - 1] = Vector3.Magnitude(FigurePositionAngles[0] - FigurePositionAngles[FigurePositionAngles.Length - 1]);
 	}
 
 	public void AnalysisOfPlayerFigures()
 	{
-		PlayerFigureAngles = new float[FigurePositionAngles.Length];
+		PlayerFigureAnglesX = new float[FigurePositionAngles.Length];
+		PlayerFigureAnglesY = new float[FigurePositionAngles.Length];
 		PlayerFigureLengthParties = new float[FigurePositionAngles.Length];
 		for(int i = 0; i < FigurePositionAngles.Length; i++)
 		{
-			PlayerFigureAngles[i] = Vector3.Angle(Vector3.up, PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
+			PlayerFigureAnglesX[i] = Vector3.Angle(Vector3.up, PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
+			PlayerFigureAnglesY[i] = Vector3.Angle(Vector3.right, PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
 			PlayerFigureLengthParties[i] = Vector3.Magnitude(PlayerFigurePositionAngles[i+1] - PlayerFigurePositionAngles[i]);
 		}
 	}
@@ -91,16 +98,17 @@ public class FigureController : MonoBehaviour {
 	public void ResetPoin()
 	{
 		PlayerFigurePositionAngles = new Vector3[FigurePositionAngles.Length + 1];
-		PlayerFigureAngles = new float[FigurePositionAngles.Length];
+		PlayerFigureAnglesX = new float[FigurePositionAngles.Length];
+		PlayerFigureAnglesY = new float[FigurePositionAngles.Length];
 		PlayerFigureLengthParties = new float[FigurePositionAngles.Length];
 		TestPointOfAngle = Input.mousePosition;
 		PlayerFigurePositionAngles[0] = Input.mousePosition;
-		Points = 0;
+		StartedMoving = false;
 	}
 
 	public bool TestAngle()
 	{
-		if (Mathf.Abs(Vector3.Angle (Vector3.up, PlayerFigurePositionAngles[Points -1] - Input.mousePosition) - PlayerAngle) >= 10)
+		if (Mathf.Abs(Vector3.Angle (Vector3.up, TestPointOfAngle - Input.mousePosition) - PlayerAngleX) >= AngleCoof || Mathf.Abs(Vector3.Angle (Vector3.right, TestPointOfAngle - Input.mousePosition) - PlayerAngleY) >= AngleCoof)
 			return true;
 		else 
 			return false;
@@ -125,84 +133,52 @@ public class FigureController : MonoBehaviour {
 	{
 		for (int offset = 0; offset < FigurePositionAngles.Length; offset++) 
 		{
-			if (ComparisonAngle (offset) && ComparisonParties (offset)) {
+			if (DirectComparison (offset) || ReverseComparison (offset)) {
 				gameObject.SendMessage ("WellDone", SendMessageOptions.DontRequireReceiver);
 				break;
 			}
 		}
 	}
 
-	public bool ComparisonAngle(int index)
+	public bool DirectComparison(int index)
 	{
-		for(int i = 0; i <= PlayerFigureAngles.Length; i++)
+		float scale_factor = PlayerFigureLengthParties [0] / FigureLengthParties[index];
+		for(int i = 0; i <= PlayerFigureAnglesX.Length + 1; i++)
 		{
-			if(i == PlayerFigureAngles.Length)
+			if(i == PlayerFigureAnglesX.Length)
 			{
 				return true;
-
 			}
 			if(index == FigureLengthParties.Length)
 				index = 0;
-			if(Mathf.Abs(PlayerFigureAngles[i] - FigureAngles[index]) >= AngleCoof)
+			if((PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) > 1f + ScaleCoof || (PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) < 1f - ScaleCoof || Mathf.Abs(PlayerFigureAnglesX[i] - FigureAnglesX[index]) >= AngleCoof || Mathf.Abs(PlayerFigureAnglesY[i] - FigureAnglesY[index]) >= AngleCoof)
 			{
 				break;
 			}
 			index++;
 		}
-
-		for(int i = 0; i <= PlayerFigureLengthParties.Length; i++)
-		{
-			if(i == PlayerFigureLengthParties.Length)
-			{
-				return true;
-
-			}
-			if(index < 0)
-				index = FigureLengthParties.Length - 1;
-			if(Mathf.Abs(PlayerFigureAngles[i]  - FigureAngles[index]) >= AngleCoof)
-			{
-				break;
-			}
-			index--;
-		}
-		
 		return false;
 	}
 
-	public bool ComparisonParties(int index)
+	public bool ReverseComparison(int index)
 	{
+
 		float scale_factor = PlayerFigureLengthParties [0] / FigureLengthParties[index];
+
 		for(int i = 0; i < PlayerFigureLengthParties.Length +1; i++)
 		{
 			if(i == PlayerFigureLengthParties.Length)
 			{
 				return true;
-
-			}
-			if(index == FigureLengthParties.Length)
-				index = 0;
-			if((PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) > 1f + ScaleCoof || (PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) < 1f - ScaleCoof )
-			{
-				break;
-			}
-			index++;
-		}
-		for(int i = 0; i < PlayerFigureLengthParties.Length +1; i++)
-		{
-			if(i == PlayerFigureLengthParties.Length)
-			{
-				return true;
-
 			}
 			if(index < 0)
 				index = FigureLengthParties.Length - 1;
-			if((PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) > 1f + ScaleCoof || (PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) < 1f - ScaleCoof )
+			if((PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) > 1f + ScaleCoof || (PlayerFigureLengthParties[i]) / (FigureLengthParties[index] * scale_factor) < 1f - ScaleCoof || Mathf.Abs(PlayerFigureAnglesX[i] - FigureAnglesX[index]) >= AngleCoof || Mathf.Abs(PlayerFigureAnglesY[i] - FigureAnglesY[index]) >= AngleCoof)
 			{
 				break;
 			}
 			index--;
 		}
-
 		return false;
 	}
 }
